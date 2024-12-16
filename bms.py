@@ -11,7 +11,7 @@ class BMSManager(QMainWindow, Ui_MainWindow):
         self.pushButton_8.clicked.connect(self.click_search)
         self.pushButton_9.clicked.connect(self.click_modify)
         self.pushButton_4.clicked.connect(self.add_book)
-    
+        self.pushButton_2.clicked.connect(self.del_book)
     def click_add(self):
         """ 
             跳转添加图书页面
@@ -47,7 +47,18 @@ class BMSManager(QMainWindow, Ui_MainWindow):
 
         new_book = Book(bookname,author,num,address)
         if new_book.addBook():
+            new_book.refresh()
             QMessageBox.information(None,"信息","添加成功！",QMessageBox.Close)
         else:
             QMessageBox.warning(None,"错误","书名已存在！",QMessageBox.Close)
     
+    def del_book(self):
+        bookname = self.lineEdit.text()
+        new_book = Book(bookname)
+        book = new_book.isExistBook(bookname)
+        if book:
+            book.booklist.remove(book)
+            book.refresh()
+        else:
+            QMessageBox.warning(None,"错误","书名不存在！",QMessageBox.Close)
+
